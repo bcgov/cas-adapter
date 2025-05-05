@@ -8,7 +8,6 @@ var services = builder.Services;
 var env = builder.Environment;
 
 var appSettings = services.AddAppSettings(env);
-services.AddTransient<ICasHttpClient, CasHttpClient>();
 
 builder.Host.UseLogging(appSettings);
 
@@ -20,6 +19,7 @@ services.AddLogging(appSettings);
 services.AddControllers();
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
+services.AddCasHttpClient(env.IsProduction());
 
 var app = builder.Build();
 app.MapHealthChecks();

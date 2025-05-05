@@ -11,24 +11,7 @@
             EnvironmentName = "Development",
         };
         services.AddAppSettings(fakeEnvironment);
-
-        services
-            .AddTransient<ITokenProvider, TokenProvider>()
-            .AddTransient<TokenDelegatingHandler>()
-            .AddTransient<ICasService, CasService>()
-            .AddHttpClient<ICasHttpClient, CasHttpClient>()
-                .ConfigurePrimaryHttpMessageHandler(() =>
-                {
-                    var httpClientHandler = new HttpClientHandler();
-
-                    //if (!fakeEnvironment.IsProduction)      // Ignore certificate errors in non-production modes.  
-                                            // This allows you to use OpenShift self-signed certificates for testing.
-                    //{
-                        httpClientHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                    //}
-                    return httpClientHandler;
-                })
-                .AddHttpMessageHandler<TokenDelegatingHandler>();
+        services.AddCasHttpClient(fakeEnvironment.IsProduction());
     }
 
     public class FakeEnvironment : IWebHostEnvironment
