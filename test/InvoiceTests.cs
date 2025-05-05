@@ -1,4 +1,4 @@
-﻿public class InvoiceTests(ICasHttpClient casHttpClient, AppSettings appSettings)
+﻿public class InvoiceTests(ICasService casService, AppSettings appSettings)
 {
     // WARNING these are not valid unit tests, they depend on existing data in the CAS system and will fail if the data is changed or removed
 
@@ -48,8 +48,7 @@
             }
         };
 
-        casHttpClient.Initialize(appSettings.Client, appSettings.IsProduction);
-        var response = await casHttpClient.CreateInvoice(invoices);
+        var response = await casService.CreateInvoice(invoices);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -70,8 +69,7 @@
         var supplierNumber = "2002741";
         var supplierSiteCode = "001";
 
-        casHttpClient.Initialize(appSettings.Client, appSettings.IsProduction);
-        await casHttpClient.GetInvoice(invoiceNumber, supplierNumber, supplierSiteCode);
+        await casService.GetInvoice(invoiceNumber, supplierNumber, supplierSiteCode);
 
         // successful from Postman DEV
         //{"invoice_number":"INV-2025-026103","invoice_status":"Never Validated","payment_status":"Not Paid","payment_number":" ","payment_date":" "}
@@ -83,15 +81,13 @@
     [Fact]
     public async Task Get_Payment_Succeed()
     {
-        //var paymentNumber = "12345678";
-        //var paymentNumber = "009877676";
-        var paymentNumber = "15200000023";
+        // UTEST
+        var paymentNumber = "15200000001";
         var payGroup = "GEN CHQ";
 
-        casHttpClient.Initialize(appSettings.Client, appSettings.IsProduction);
-        await casHttpClient.GetPayment(paymentNumber, payGroup);
+        await casService.GetPayment(paymentNumber, payGroup);
 
         // successful JSON returned from CAS example
-        //{ "invoice_number":"INV-2025-026102","invoice_status":"Validated","payment_status":"Fully Paid","payment_number":"15200000023","payment_date":"17-APR-2025"}
+        //{"paymentnumber":15200000001,"paygroup":"GEN CHQ","paymentdate":"02-MAY-2025 00:00:00","paymentamount":284,"paymentstatus":"NEGOTIABLE","paymentstatusdate":"02-MAY-2025 13:40:11"}
     }
 }
