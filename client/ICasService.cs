@@ -1,11 +1,7 @@
 ﻿namespace Client;
 
-public interface ICasHttpClient
+public interface ICasService
 {
-    void Initialize(Model.Settings.Client settings, bool isProduction);
-    Task<HttpStatusCode> GetToken();
-    Task<Response> Get(string url);
-    Task<Response> Post(string url, string payload);
     Task<Response> CreateInvoice(Invoice invoices);
     Task<Response> GetInvoice(string invoiceNumber, string supplierNumber, string supplierSiteCode);
     Task<Response> GetPayment(string paymentNumber, string payGroup);
