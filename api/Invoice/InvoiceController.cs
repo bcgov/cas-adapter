@@ -2,26 +2,12 @@
 
 [Route("api/[controller]")]
 [ApiController]
-public class InvoiceController : Controller
+public class InvoiceController(ICasService casService) : Controller
 {
-    private readonly ICasHttpClient _casHttpClient;
-
-    public InvoiceController(AppSettings appSettings, ICasHttpClient casHttpClient)
-    {
-        _casHttpClient = casHttpClient;
-
-        if (string.IsNullOrEmpty(appSettings.Client?.Id) || string.IsNullOrEmpty(appSettings.Client.Secret) || string.IsNullOrEmpty(appSettings.Client.BaseUrl) || string.IsNullOrEmpty(appSettings.Client.TokenUrl))
-        {
-            throw new ArgumentNullException("Client is not configured. Check your user secrets, appsettings, and environment variables.");
-        }
-
-        _casHttpClient.Initialize(appSettings.Client, appSettings.IsProduction);
-    }
-
     [HttpPost]
     public async Task<IActionResult> Generate([FromBody] Invoice invoice)
     {
-        (var result, var statusCode) = await _casHttpClient.CreateInvoice(invoice);
+        (var result, var statusCode) = await casService.CreateInvoice(invoice);
 
         return StatusCode((int)statusCode, new JsonResult(result).Value);
     }
@@ -29,7 +15,7 @@ public class InvoiceController : Controller
     [HttpGet("{invoiceNumber}/{supplierNumber}/{supplierSiteCode}")]
     public async Task<IActionResult> Search(string invoiceNumber, string supplierNumber, string supplierSiteCode)
     {
-        (var result, var statusCode) = await _casHttpClient.GetInvoice(invoiceNumber, supplierNumber, supplierSiteCode);
+        (var result, var statusCode) = await casService.GetInvoice(invoiceNumber, supplierNumber, supplierSiteCode);
 
         return StatusCode((int)statusCode, new JsonResult(result).Value);
     }
