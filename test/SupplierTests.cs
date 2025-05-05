@@ -72,8 +72,7 @@
     {
         var supplierName = "EMPRESS CHILDCARE";
         var postalCode = "V8V 2K3";
-        casHttpClient.Initialize(appSettings.Client, appSettings.IsProduction);
-        var response = await casHttpClient.GetSupplierByNameAndPostalCode(supplierName, postalCode);
+        var response = await casService.GetSupplierByNameAndPostalCode(supplierName, postalCode);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
