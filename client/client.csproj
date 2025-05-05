@@ -10,6 +10,7 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Polly" Version="8.5.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,6 +21,8 @@
     <Using Include="Microsoft.Extensions.DependencyInjection" />
     <Using Include="Microsoft.Extensions.Logging" />
     <Using Include="Model" />
+    <Using Include="Polly" />
+    <Using Include="Polly.Retry" />
     <Using Include="System.Net" />
     <Using Include="System.Net.Http.Headers" />
     <Using Include="Newtonsoft.Json" />

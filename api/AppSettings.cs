@@ -46,6 +46,7 @@ public static class AppSettingsExtensions
         // app settings 
         var appSettings = new AppSettings(configuration, environment);
         services.AddSingleton(appSettings);
+        services.AddSingleton(appSettings.Client);
         return appSettings;
     }
 }

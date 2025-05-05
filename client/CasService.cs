@@ -1,5 +1,4 @@
-﻿
-namespace Client;
+﻿namespace Client;
 
 public class CasService(ICasHttpClient _httpClient, Model.Settings.Client _settings, ILogger<CasHttpClient> _logger) : ICasService
 {
