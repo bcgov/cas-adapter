@@ -24,8 +24,8 @@ public class AppSettings
         {
             Id = configuration["ClientId"],
             Secret = configuration["ClientKey"],
-            BaseUrl = configuration["BaseUrl"],
-            TokenUrl = configuration["TokenUrl"]
+            BaseUrl = configuration["BaseUrl"]?.ToString().Trim('/'),
+            TokenUrl = configuration["TokenUrl"]?.ToString().Trim('/')
         };
     }
 }
