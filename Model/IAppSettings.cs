@@ -1,5 +1,17 @@
 ﻿namespace Model.Settings;
 
+public interface IAppSettings
+{
+    public Splunk Splunk { get; }
+    public IConfiguration Configuration { get; }
+    public IHostEnvironment Environment { get; }
+    public Auth Auth { get; }
+    public Client Client { get; }
+
+    public bool IsProduction => Environment.IsProduction();
+    public bool IsDevelopment => Environment.IsDevelopment();
+}
+
 public class Splunk 
 {
     public string Url { get; set; }
@@ -9,7 +21,6 @@ public class Splunk
 public class Auth
 {
     public JwtSection Jwt { get; set; }
-    //public Oidc Oidc { get; set; }
 
     public class JwtSection
     {

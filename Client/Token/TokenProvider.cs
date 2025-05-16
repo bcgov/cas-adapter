@@ -1,6 +1,6 @@
 ﻿namespace Client;
 
-public class TokenProvider(HttpClient httpClient, IPolicyProvider policyProvider, Model.Settings.Client settings, ILogger<TokenProvider> logger) : ITokenProvider
+public class TokenProvider(HttpClient httpClient, IPolicyProvider policyProvider, IAppSettings appSettings, ILogger<TokenProvider> logger) : ITokenProvider
 {
     private string bearerToken;
 
@@ -13,14 +13,15 @@ public class TokenProvider(HttpClient httpClient, IPolicyProvider policyProvider
 
     public async Task RefreshTokenAsync()
     {
-        settings.Id.ThrowIfNullOrEmpty();
-        settings.Secret.ThrowIfNullOrEmpty();
+        appSettings?.Client?.Id.ThrowIfNullOrEmpty();
+        appSettings?.Client?.Secret.ThrowIfNullOrEmpty();
+        appSettings?.Client?.TokenUrl.ThrowIfNullOrEmpty();
 
         try
         {
-            var base64 = Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(string.Format("{0}:{1}", settings.Id, settings.Secret)));
+            var base64 = Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(string.Format("{0}:{1}", appSettings.Client.Id, appSettings.Client.Secret)));
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64);
-            var request = new HttpRequestMessage(HttpMethod.Post, settings.TokenUrl);
+            var request = new HttpRequestMessage(HttpMethod.Post, appSettings.Client.TokenUrl);
             var formData = new List<KeyValuePair<string, string>>();
             formData.Add(new KeyValuePair<string, string>("grant_type", "client_credentials"));
             request.Content = new FormUrlEncodedContent(formData);

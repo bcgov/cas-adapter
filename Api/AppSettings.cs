@@ -1,16 +1,17 @@
 ﻿namespace Api;
 
-public class AppSettings
+public class AppSettings : IAppSettings
 {
-    public readonly Splunk Splunk;
-    public readonly IConfiguration Configuration;
-    public readonly IWebHostEnvironment Environment;
-    public readonly Auth Auth;
-    public readonly Model.Settings.Client Client;
+    public Splunk Splunk { get; private set; }
+    public IConfiguration Configuration { get; private set; }
+    public IHostEnvironment Environment { get; private set; }
+    public Auth Auth { get; private set; }
+    public Model.Settings.Client Client { get; private set; }
+
     public bool IsProduction => Environment.IsProduction();
     public bool IsDevelopment => Environment.IsDevelopment();
 
-    public AppSettings(IConfiguration configuration, IWebHostEnvironment environment)
+    public AppSettings(IConfiguration configuration, IHostEnvironment environment)
     {
         Configuration = configuration;
         Environment = environment;
@@ -45,8 +46,7 @@ public static class AppSettingsExtensions
 
         // app settings 
         var appSettings = new AppSettings(configuration, environment);
-        services.AddSingleton(appSettings);
-        services.AddSingleton(appSettings.Client);
+        services.AddSingleton<IAppSettings>(appSettings);
         return appSettings;
     }
 }

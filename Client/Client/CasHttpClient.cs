@@ -4,15 +4,19 @@ public class CasHttpClient : ICasHttpClient
 {
     private readonly HttpClient _httpClient;
     private readonly IPolicyProvider _policyProvider;
+    private readonly IAppSettings _appSettings;
     private readonly ILogger<CasHttpClient> _logger;
 
-    public CasHttpClient(HttpClient httpClient, IPolicyProvider policyProvider, Model.Settings.Client settings, ILogger<CasHttpClient> logger)
+    public CasHttpClient(HttpClient httpClient, IPolicyProvider policyProvider, IAppSettings appSettings, ILogger<CasHttpClient> logger)
     {
+        appSettings?.Client?.BaseUrl.ThrowIfNullOrEmpty();
+
         _policyProvider = policyProvider;
+        _appSettings = appSettings;
         _logger = logger;
-        
+
         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        httpClient.BaseAddress = new Uri(settings.BaseUrl);
+        httpClient.BaseAddress = new Uri(appSettings.Client.BaseUrl);
         httpClient.Timeout = new TimeSpan(1, 0, 0);  // 1 hour timeout 
         _httpClient = httpClient;
     }
@@ -30,7 +34,10 @@ public class CasHttpClient : ICasHttpClient
         }
 
         var responseContent = await response.Content.ReadAsStringAsync();
-        _logger.LogInformation("RESPONSE {0}", responseContent);
+        if (!_appSettings.IsProduction)
+        {
+            _logger.LogInformation("RESPONSE BODY {0}", responseContent);
+        }
         var responseStatusCode = response.StatusCode;
         // this is a hack work-around for CAS returning 404 instead of 204. When we get a 404 and json response with "code" = "NotFound", we know CAS really means a 204, the object didn't exist e.g. the invoice number didn't exist in the database
         if (response.StatusCode == HttpStatusCode.NotFound && !string.IsNullOrEmpty(responseContent))
@@ -63,6 +70,10 @@ public class CasHttpClient : ICasHttpClient
         }
 
         var responseContent = await response.Content.ReadAsStringAsync();
+        if (!_appSettings.IsProduction && !string.IsNullOrEmpty(responseContent))
+        {
+            _logger.LogInformation("RESPONSE BODY {0}", responseContent);
+        }
         return new(responseContent, response.StatusCode);
     }
 }
@@ -72,14 +83,14 @@ public static class CasHttpClientExtensions
     public static IServiceCollection AddCasHttpClient(this IServiceCollection services, bool isProduction)
     {
         services
-            // TODO uncomment after SSL cert is working in OpenShift
+            //.AddTransient<LogInvalidSslHttpClientHandler>()
             .AddTransient<IPolicyProvider, PollyPolicyProvider>()
             .AddTransient<ITokenProvider, TokenProvider>()
             .AddTransient<TokenDelegatingHandler>()
             .AddTransient<ICasService, CasService>()
             .AddHttpClient<ICasHttpClient, CasHttpClient>()
-                //.AddHttpClient<ICasHttpClient, CasHttpClient>()
-                //    .ConfigurePrimaryHttpMessageHandler<IgnoreSslClientHandler>()
+                // TODO 
+                //.ConfigurePrimaryHttpMessageHandler<LogInvalidSslHttpClientHandler>()
                 .AddHttpMessageHandler<TokenDelegatingHandler>();
 
         return services;

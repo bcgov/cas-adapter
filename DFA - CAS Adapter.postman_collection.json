@@ -1,0 +1,377 @@
+{
+	"info": {
+		"_postman_id": "1909d1e3-7e10-4074-8e20-6a81cd2d3753",
+		"name": "DFA - CAS Adapter",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "730057"
+	},
+	"item": [
+		{
+			"name": "Get Token",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "dfa-cas-api-gateway-6006",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{secret}}",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{tokenurl}}",
+					"host": [
+						"{{tokenurl}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Generate Invoice",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \"invoiceType\": \"Standard\",\r\n \"supplierNumber\": \"2002738\",\r\n \"supplierSiteNumber\": \"001\",\r\n \"invoiceDate\": \"2025-04-17\",\r\n \"invoiceNumber\": \"INV-2025-026104\",\r\n \"invoiceAmount\": 284.00,\r\n \"payGroup\": \"GEN CHQ\",\r\n \"dateInvoiceReceived\": \"2025-04-17\",\r\n //\"dateGoodsReceived\": \"\",\r\n \"remittanceCode\": \"01\",\r\n \"specialHandling\": false,\r\n \"nameLine1\": \"\",\r\n \"nameLine2\": \"\",\r\n \"addressLine1\": \"2671 Champions Lounge\",\r\n \"addressLine2\": \"30\",\r\n \"addressLine3\": \"Galaxy Studios\",\r\n \"city\": \"Chilliwack\",\r\n \"country\": \"CA\",\r\n \"province\": \"BC\",\r\n \"postalCode\": \"V4R9M0\",\r\n \"qualifiedReceiver\": \"systemuser\",\r\n \"terms\": \"Immediate\",\r\n \"payAloneFlag\": \"Y\",\r\n \"paymentAdviceComments\": \"\",\r\n \"remittanceMessage1\": \"21-03304-VIC-Albert, Ida\",\r\n \"remittanceMessage2\": \"Income Support-Lost Earning Capacity-Minimum Wage\",\r\n \"remittanceMessage3\": \"Crime Victim Assistance Program\",\r\n \"glDate\": \"2025-05-17\",\r\n \"invoiceBatchName\": \"EMCR TRAIN 2\",\r\n \"currencyCode\": \"CAD\",\r\n \"invoiceLineDetails\": [{\r\n   \"invoiceLineNumber\": 1,\r\n   \"invoiceLineType\": \"Item\",\r\n   \"lineCode\": \"DR\",\r\n   \"invoiceLineAmount\": 284.00,\r\n   \"defaultDistributionAccount\": \"010.15004.10250.5298.1500000.000000.0000\",\r\n   \"description\": \"\",\r\n   \"taxClassificationCode\": \"\",\r\n   \"distributionSupplier\": \"\",\r\n   \"info1\": \"\",\r\n   \"info2\": \"\",\r\n   \"info3\": \"\"\r\n   }]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{server}}/api/Invoice",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"api",
+						"Invoice"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "HealthCheck Ready",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/ready",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"ready"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Invoice",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/api/Invoice/INV-2025-026102/2000428/001",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"api",
+						"Invoice",
+						"INV-2025-026102",
+						"2000428",
+						"001"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Search Invoice TRAIN",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://training-cas-adapter.silver.devops.bcgov/api/Invoice/INV-2025-026106/2005236/001",
+							"protocol": "https",
+							"host": [
+								"training-cas-adapter",
+								"silver",
+								"devops",
+								"bcgov"
+							],
+							"path": [
+								"api",
+								"Invoice",
+								"INV-2025-026106",
+								"2005236",
+								"001"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "Search Invoice TRAIN WSGW",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://wsgw.jag.gov.bc.ca/emcr/dfa/training-cas-adapter/api/invoice/RC-CLM-J0G4N8-10888/2005236/001",
+							"protocol": "https",
+							"host": [
+								"wsgw",
+								"jag",
+								"gov",
+								"bc",
+								"ca"
+							],
+							"path": [
+								"emcr",
+								"dfa",
+								"training-cas-adapter",
+								"api",
+								"invoice",
+								"RC-CLM-J0G4N8-10888",
+								"2005236",
+								"001"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Get Payment",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/api/Invoice/payment/15200000001/GEN CHQ",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"api",
+						"Invoice",
+						"payment",
+						"15200000001",
+						"GEN CHQ"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Supplier By Number",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/api/Supplier/2002738",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"api",
+						"Supplier",
+						"2002738"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find Supplier By Supplier Name",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/api/Supplier/suppliersearch/TEST",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"api",
+						"Supplier",
+						"suppliersearch",
+						"TEST"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Find Supplier By Supplier Name",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://training-cas-adapter.silver.devops.bcgov/api/Supplier/suppliersearch/FANNY",
+							"protocol": "https",
+							"host": [
+								"training-cas-adapter",
+								"silver",
+								"devops",
+								"bcgov"
+							],
+							"path": [
+								"api",
+								"Supplier",
+								"suppliersearch",
+								"FANNY"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Get Supplier By Number And Site Code",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/api/Supplier/2009338/site/001",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"api",
+						"Supplier",
+						"2009338",
+						"site",
+						"001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Supplier By Last Name and SIN",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/api/Supplier/DFATEST/lastname/514754456/sin",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"api",
+						"Supplier",
+						"DFATEST",
+						"lastname",
+						"514754456",
+						"sin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Supplier By Business Number",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/api/Supplier/123456789/businessnumber",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"api",
+						"Supplier",
+						"123456789",
+						"businessnumber"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Supplier By Name and Postal Code",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/api/Supplier/supplierbyname/EMPRESS CHILDCARE/V8V 2K3",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"api",
+						"Supplier",
+						"supplierbyname",
+						"EMPRESS CHILDCARE",
+						"V8V 2K3"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

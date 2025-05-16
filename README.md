@@ -143,3 +143,10 @@ To run Splunk locally for testing, you can run a local docker with the following
 `docker run -p 8000:8000 -p 8088:8088 --name splunk -e SPLUNK_START_ARGS='--accept-license' -e SPLUNK_PASSWORD='password' -e SPLUNK_HEC_TOKEN='efbb3565-5a2d-4277-80f8-9262b8362313' -e SPLUNK_HEC_SSL=false splunk/splunk:latest`
 Connect to Splunk http://localhost:8000 with admin and password supplied with the above command line.
 
+## Postman
+
+See file `DFA - CAS.postman_collection.json` for a Postman collection of the CAS Adapter APIs. To authenticate:
+- Import environment files from a previous developer, this will contain the secrets and values needed to authenticate and configure the correct environment
+- Send a "Get Token" request and copy the "access_token" value from the response.
+- Paste the "access_token" value into the "Authorization" header of the collection "DFA - CAS Adapter".
+- Send any request in the collection. If the token expires, repeat the above steps.

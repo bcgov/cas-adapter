@@ -1,10 +1,10 @@
 ﻿namespace Client;
 
-public class CasService(ICasHttpClient _httpClient, Model.Settings.Client _settings, ILogger<CasHttpClient> _logger) : ICasService
+public class CasService(ICasHttpClient _httpClient, IAppSettings appSettings, ILogger<CasHttpClient> _logger) : ICasService
 {
-    private string _invoiceBaseUrl => $"{_settings.BaseUrl}/cfs/apinvoice/";
-    private string _supplierBaseUrl => $"{_settings.BaseUrl}/cfs/supplier/";
-    private string _supplierSearchBaseUrl => $"{_settings.BaseUrl}/cfs/suppliersearch/";
+    private string _invoiceBaseUrl => $"{appSettings.Client.BaseUrl}/cfs/apinvoice/";
+    private string _supplierBaseUrl => $"{appSettings.Client.BaseUrl}/cfs/supplier/";
+    private string _supplierSearchBaseUrl => $"{appSettings.Client.BaseUrl}/cfs/suppliersearch/";
 
     public async Task<Response> CreateInvoice(Invoice invoice)
     {
@@ -23,7 +23,14 @@ public class CasService(ICasHttpClient _httpClient, Model.Settings.Client _setti
             _logger.LogError(e, $"Error generating invoice: {invoice.InvoiceNumber}.");
             dynamic errorObject = new JObject();
             errorObject.invoice_number = invoice.InvoiceNumber;
+            if (!appSettings.IsProduction)
+            {
             errorObject.CAS_Returned_Messages = "Internal Error: " + e.Message;
+            }
+            else
+            {
+                errorObject.CAS_Returned_Messages = "Internal Error, invoice was not generated.";
+            }
             return new(JsonConvert.SerializeObject(errorObject), HttpStatusCode.InternalServerError);
         }
     }
@@ -43,7 +50,14 @@ public class CasService(ICasHttpClient _httpClient, Model.Settings.Client _setti
         catch (Exception ex)
         {
             _logger.LogError(ex, $"Error searching invoice.");
-            return new Response(ex.Message, HttpStatusCode.InternalServerError);
+            if (appSettings.IsProduction)
+            {
+                return new Response("Internal Error, could not retrieve invoice.", HttpStatusCode.InternalServerError);
+        }
+            else
+            {
+                return new Response("Internal Error: " + ex.Message, HttpStatusCode.InternalServerError);
+    }
         }
     }
 
@@ -60,7 +74,14 @@ public class CasService(ICasHttpClient _httpClient, Model.Settings.Client _setti
         catch (Exception ex)
         {
             _logger.LogError(ex, $"Error searching for payment.");
-            return new Response(ex.Message, HttpStatusCode.InternalServerError);
+            if (appSettings.IsProduction)
+            {
+                return new Response("Internal Error, could not retrieve payment.", HttpStatusCode.InternalServerError);
+        }
+            else
+            {
+                return new Response("Internal Error: " + ex.Message, HttpStatusCode.InternalServerError);
+    }
         }
     }
 
@@ -79,7 +100,14 @@ public class CasService(ICasHttpClient _httpClient, Model.Settings.Client _setti
         catch (Exception ex)
         {
             _logger.LogError(ex, $"Error searching Supplier By Number.");
-            return new("Internal Error: " + ex.Message, HttpStatusCode.InternalServerError);
+            if (appSettings.IsProduction) 
+            {
+                return new Response("Internal Error, could not retrieve supplier.", HttpStatusCode.InternalServerError);
+        }
+            else
+            {
+                return new Response("Internal Error: " + ex.Message, HttpStatusCode.InternalServerError);
+    }
         }
     }
 
@@ -98,7 +126,14 @@ public class CasService(ICasHttpClient _httpClient, Model.Settings.Client _setti
         catch (Exception ex)
         {
             _logger.LogError(ex, $"Error searching Supplier By Number and Site Code.");
-            return new("Internal Error: " + ex.Message, HttpStatusCode.InternalServerError);
+            if (appSettings.IsProduction)
+            {
+                return new Response("Internal Error, could not retrieve supplier by supplier number and site code.", HttpStatusCode.InternalServerError);
+        }
+            else
+            {
+                return new Response("Internal Error: " + ex.Message, HttpStatusCode.InternalServerError);
+    }
         }
     }
 
@@ -123,7 +158,14 @@ public class CasService(ICasHttpClient _httpClient, Model.Settings.Client _setti
         catch (Exception ex)
         {
             _logger.LogError(ex, $"Error searching Supplier By Name.");
-            return new("Internal Error: " + ex.Message, HttpStatusCode.InternalServerError);
+            if (appSettings.IsProduction)
+            {
+                return new Response("Internal Error, could not retrieve supplier by supplier name.", HttpStatusCode.InternalServerError);
+        }
+            else
+            {
+                return new Response("Internal Error: " + ex.Message, HttpStatusCode.InternalServerError);
+    }
         }
     }
 
@@ -143,7 +185,14 @@ public class CasService(ICasHttpClient _httpClient, Model.Settings.Client _setti
         catch (Exception ex)
         {
             _logger.LogError(ex, $"Error searching Supplier By Last Name and SIN.");
-            return new("Internal Error: " + ex.Message, HttpStatusCode.InternalServerError);
+            if (appSettings.IsProduction)
+            {
+                return new Response("Internal Error, could not retrieve supplier by last name and SIN.", HttpStatusCode.InternalServerError);
+        }
+            else
+            {
+                return new Response("Internal Error: " + ex.Message, HttpStatusCode.InternalServerError);
+    }
         }
     }
 
@@ -162,7 +211,14 @@ public class CasService(ICasHttpClient _httpClient, Model.Settings.Client _setti
         catch (Exception ex)
         {
             _logger.LogError(ex, $"Error searching Supplier By Business Number.");
-            return new("Internal Error: " + ex.Message, HttpStatusCode.InternalServerError);
+            if (appSettings.IsProduction)
+            {
+                return new Response("Internal Error, could not retrieve supplier by business number.", HttpStatusCode.InternalServerError);
+            }
+            else
+            {
+                return new Response("Internal Error: " + ex.Message, HttpStatusCode.InternalServerError);
+            }
         }
     }
 
@@ -175,13 +231,20 @@ public class CasService(ICasHttpClient _httpClient, Model.Settings.Client _setti
 
         try
         {
-            var url = $"{_settings.BaseUrl}/cfs/supplierbyname/{supplierName}/{postalCode}";
+            var url = $"{appSettings.Client.BaseUrl}/cfs/supplierbyname/{supplierName}/{postalCode}";
             return await _httpClient.Get(url);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, $"Error searching Supplier By Supplier Name and Postal Code.");
-            return new("Internal Error: " + ex.Message, HttpStatusCode.InternalServerError);
+            if (appSettings.IsProduction)
+            {
+                return new Response("Internal Error, could not retrieve supplier by supplier name and postal code.", HttpStatusCode.InternalServerError);
+            }
+            else
+            {
+                return new Response("Internal Error: " + ex.Message, HttpStatusCode.InternalServerError);
+            }
         }
     }
 }
