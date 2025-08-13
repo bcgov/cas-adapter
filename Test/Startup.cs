@@ -10,21 +10,12 @@
         {
             EnvironmentName = "Development",
         };
-
-        var configuration = new ConfigurationBuilder()
-            .AddUserSecrets<AppSettings>()
-            .AddEnvironmentVariables()
-            .Build();
-
         services.AddAppSettings(fakeEnvironment);
         services.AddCasHttpClient(fakeEnvironment.IsProduction());
-        services.AddServices();
-        services.AddAutoMapperMappings();
         services.AddTransient<IPolicyProvider, PollyPolicyProvider>();
         // TODO remove after SSL cert is enabled on OpenShift
         services.AddHttpClient();
         services.AddTransient<ITokenProvider, TokenProvider>();
-        services.AddDatabase(configuration);
     }
 
     public class FakeEnvironment : IWebHostEnvironment

@@ -1,4 +1,4 @@
-﻿namespace Model;
+﻿namespace Client;
 
 public interface ICasHttpClient
 {
