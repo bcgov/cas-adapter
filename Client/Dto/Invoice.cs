@@ -2,7 +2,7 @@
 {
     public bool IsBlockSupplier { get; set; }
 
-    public string InvoiceType { get; set; }
+    public string InvoiceType { get; set; } = "Standard";
 
     public string SupplierNumber { get; set; }
 
@@ -14,13 +14,13 @@
 
     public decimal InvoiceAmount { get; set; }
 
-    public string PayGroup { get; set; }
+    public string PayGroup { get; set; } = "GEN CHQ";
 
     public DateTime DateInvoiceReceived { get; set; }
 
     public DateTime? DateGoodsReceived { get; set; }
 
-    public string RemittanceCode { get; set; }
+    public string RemittanceCode { get; set; } = "01";
 
     public bool SpecialHandling { get; set; }
 
@@ -36,9 +36,9 @@
 
     public string City { get; set; }
 
-    public string Country { get; set; }
+    public string Country { get; set; } = string.Empty;
 
-    public string Province { get; set; }
+    public string Province { get; set; } = string.Empty;
 
     public string PostalCode { get; set; }
 
@@ -46,7 +46,7 @@
 
     public string Terms { get; set; }
 
-    public string PayAloneFlag { get; set; }
+    public string PayAloneFlag { get; set; } = "N";
 
     public string PaymentAdviceComments { get; set; }
 
@@ -60,7 +60,7 @@
 
     public string InvoiceBatchName { get; set; }
 
-    public string CurrencyCode { get; set; }
+    public string CurrencyCode { get; set; } = "CAD";
 
     public string? AccountNumber { get; set; }
 

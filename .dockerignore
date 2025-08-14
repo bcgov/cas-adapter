@@ -1,0 +1,13 @@
+.dockerignore
+.git
+.gitattributes
+.gitignore
+.github
+.vs
+.openshift
+*.json
+**/bin/
+**/obj/
+Dockerfile
+README.md
+ssl
