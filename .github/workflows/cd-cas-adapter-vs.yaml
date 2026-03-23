@@ -1,0 +1,49 @@
+# ======================================================================================
+#  Last Updated: 2026-03-23
+#
+#  Description:
+#  CD workflow for CAS Adapter - Victim Services (f9a9e6).
+#  Orchestrates build and deployment using the reusable build template.
+#
+#  Triggers:
+#  1. Automatic (push): Triggers when code is merged to 'main' branch.
+#  2. Manual (workflow_dispatch): Allows for manual deployments.
+# ======================================================================================
+
+name: CD CAS Adapter - Victim Services
+
+# --- TRIGGERS -----------------------------------------------------------------------
+on:
+  push:
+    branches: [main]
+    paths:
+      - "Api/**"
+      - "Client/**"
+      - "Database/**"
+      - "Model/**"
+      - "Resources/**"
+      - "Shared.Database/**"
+      - "Dockerfile"
+
+  workflow_dispatch:
+
+# --- JOBS ---------------------------------------------------------------------------
+jobs:
+  build-and-deploy:
+    permissions:
+      contents: read
+      actions: read
+      packages: write
+      id-token: write
+    uses: ./.github/workflows/build-template.yml
+    with:
+      EVENT_NAME: ${{ github.event_name }}
+      IMAGE_CONTEXT: .
+      IMAGE_FILE: ./Dockerfile
+      IMAGE_NAME: cas-adapter
+      BRANCH: ${{ github.ref_name }}
+    secrets:
+      OCP4_PASSWORD: ${{ secrets.VS_OCP4_PASSWORD }}
+      OCP4_NAMESPACE: ${{ secrets.VS_OCP4_NAMESPACE }}
+      OCP4_REGISTRY: ${{ secrets.VS_OCP4_REGISTRY }}
+      OPENSHIFT_SERVER: ${{ secrets.VS_OPENSHIFT_SERVER }}
