@@ -340,25 +340,6 @@
 				}
 			},
 			"response": []
-		},
-		{
-			"name": "Process Claims",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{server}}/api/Dynamics/process-claims",
-					"host": [
-						"{{server}}"
-					],
-					"path": [
-						"api",
-						"Dynamics",
-						"process-claims"
-					]
-				}
-			},
-			"response": []
 		}
 	],
 	"auth": {

@@ -1,6 +1,4 @@
-﻿namespace Model;
-
-public class Invoice
+﻿public class Invoice
 {
     public bool IsBlockSupplier { get; set; }
 

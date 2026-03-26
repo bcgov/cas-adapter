@@ -21,15 +21,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Client\Client.csproj" />
-    <ProjectReference Include="..\Database\Database.csproj" />
     <ProjectReference Include="..\Model\Model.csproj" />
-    <ProjectReference Include="..\Resources\Resources.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Using Include="Api" />
     <Using Include="Client" />
-    <Using Include="Database" />
     <Using Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
     <Using Include="Microsoft.AspNetCore.Builder" />
     <Using Include="Microsoft.AspNetCore.Hosting" />
@@ -46,11 +43,9 @@
     <Using Include="Newtonsoft.Json.Linq" />
     <Using Include="Model" />
     <Using Include="Model.Settings" />
-    <Using Include="Resources" />
     <Using Include="Serilog" />
     <Using Include="Serilog.Events" />
     <Using Include="Serilog.Formatting.Compact" />
-    <Using Include="Shared.Database" />
     <Using Include="System" />
     <Using Include="System.Linq" />
     <Using Include="System.Net" />
@@ -61,6 +56,7 @@
     <Using Include="System.Threading.Tasks" />
     <Using Include="Microsoft.Extensions.Logging.ILogger" Alias="ILogger" />
     <Using Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" />
-    <Using Include="Microsoft.Extensions.Diagnostics.HealthChecks" />    
+    <Using Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
+    
   </ItemGroup>
 </Project>

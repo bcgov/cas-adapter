@@ -12,10 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Shared.Contract\Shared.Contract.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Using Include="Microsoft.Extensions.Configuration" />
     <Using Include="Microsoft.Extensions.Hosting" />
     <Using Include="System.Net" />
