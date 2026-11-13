@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="AutoMapper" Version="15.1.4" />
     <PackageReference Include="AutoMapper.Extensions.ExpressionMapping" Version="7.0.2" />
     <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.1.27" />
   </ItemGroup>
